@@ -1,0 +1,6 @@
+[0m[[0m[0mdebug[0m] [0m[0mAcquiring lock on file /Users/dms08/Desktop/scala/akkaPractice/project/target/.sbt-compilation-infos/akkapractice-compile/.sbt-idea-lock ...[0m
+[0m[[0m[31merror[0m] [0m[0m/Users/dms08/Desktop/scala/akkaPractice/src/main/scala/akka/Stream.scala:13:15: not found: value GET[0m
+[0m[[0m[31merror[0m] [0m[0m  HttpRequest(GET, uri = url)[0m
+[0m[[0m[31merror[0m] [0m[0m              ^[0m
+[0m[[0m[31merror[0m] [0m[0mone error found[0m
+[0m[[0m[0mdebug[0m] [0m[0mReleasing lock on file /Users/dms08/Desktop/scala/akkaPractice/project/target/.sbt-compilation-infos/akkapractice-compile/.sbt-idea-lock.[0m
