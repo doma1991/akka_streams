@@ -45,10 +45,10 @@ object Stream extends App {
 
   def performRequest(id: String) = {
     Http().singleRequest(buildRequest(id))
-      .flatMap { r =>
-        val v = Unmarshal(r.entity).to[StripeResponse].zip(Future{"TODO: real body here!!"})
-        v
-      }
+      .flatMap { r => Unmarshal(r.entity).to[String]
+      }.map { body =>
+      (body.parseJson.convertTo[StripeResponse], body)
+    }
   }
 
   def performRequestWithPagingResult(id: String) = {
