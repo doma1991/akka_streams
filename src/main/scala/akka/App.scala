@@ -1,11 +1,9 @@
 package akka
 
-import akka.JsonFormats.{jsonFormat1, jsonFormat2}
+import java.text.SimpleDateFormat
 import akka.actor.ActorSystem
 import com.jayway.jsonpath.JsonPath
 import spray.json.DefaultJsonProtocol
-
-
 
 case class Result(id: String)
 
@@ -17,8 +15,9 @@ object JsonFormats extends DefaultJsonProtocol {
   implicit val stripeFormat = jsonFormat2(StripeResponse)
 }
 
-import JsonFormats._
-import spray.json._
+import org.json4s.jackson.JsonMethods._
+import org.json4s.{DefaultFormats, _}
+
 
 
 object App extends App {
@@ -28,7 +27,25 @@ object App extends App {
 
   implicit val system = ActorSystem("QuickStart")
   implicit val ec = system.dispatcher
+  implicit val formats = DefaultFormats
+
+  def epochToDate(epochMillis: BigInt): String = {
+    val convertedToLong = epochMillis * 1000L
+    val df:SimpleDateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss")
+    df.format(convertedToLong)
+  }
+
   val stripe = new Stream("txn_1Fqdyl2eZvKYlo2Cn0OSmwaY", "starting_after", hasMoreFromJson, 100, idFromJson)
 
-  stripe.asSource().runForeach(println)
+  stripe.asSource().runForeach(id => {
+
+    val rawValue = (parse(id) \ "data" \\ "created").toOption
+    rawValue match {
+
+      case l: Option[JObject] => l match { case Some(j) => j.obj.foreach(i => i._2 match { case JInt(int) => println("Date: " + epochToDate(int))})}
+      case None => println("Value not present in JSON")
+    }
+
+//    println(rawValue)
+  })
 }
